@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use App\Post;
 
 class ToppagesController extends Controller
 {
@@ -38,12 +39,16 @@ class ToppagesController extends Controller
             if(\Auth::user()->profile()->get()->first() === null){
                 return redirect('profiles/create');
             }else{
-                return view('admin_top');
+                $posts = Post::all();
+                return view('admin_top', compact('posts'));
             }
             
         }else{
-            // viewの呼び出し
-            return view('top');
+            if(\Auth::user()->profile()->get()->first() === null){
+                return redirect('profiles/create');
+            }else{
+                return view('top');
+            }
         }
     }
 }

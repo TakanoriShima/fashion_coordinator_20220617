@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Room;
+use App\Chat;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -93,8 +95,21 @@ class PostsController extends Controller
      */
     public function show(Post $post)
     {
-        // dd($post);
-        return view('posts.show', compact('post'));
+        // その投稿に紐づいたチャット一覧を取得
+        // お店側
+        if(\Auth::user()->role === 1){
+            $room = Room::where('post_id', $post->id)->where('user_id', \Auth::id())->get()->first();
+            $users = array();
+            // dd($chats);
+        }else{ // ユーザー側
+            // その投稿に回答したお店一覧
+            $users = $users = $post->room_users()->get();
+            // dd($users);
+            $room = null;
+        }
+            
+        return view('posts.show', compact('post', 'room', 'users'));
+        
     }
 
     /**

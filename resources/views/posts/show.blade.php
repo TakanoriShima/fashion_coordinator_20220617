@@ -23,14 +23,43 @@
     </table>
 
     @if($post->user->id === Auth::id())
-    <div class="row mt-3">
-        {!! link_to_route('posts.edit', '編集' , ['id' => $post->id ],['class' => 'btn btn-primary col-sm-6']) !!}
-        
-        {!! Form::open(['route' => ['posts.destroy', 'id' => $post->id ], 'method' => 'DELETE', 'class' => 'col-sm-6']) !!}
-            {!! Form::submit('削除', ['class' => 'btn btn-danger btn-block col-sm-12']) !!}
-        {!! Form::close() !!}
-
-    </div>
+        <div class="row mt-3">
+            {!! link_to_route('posts.edit', '編集' , ['id' => $post->id ],['class' => 'btn btn-primary col-sm-6']) !!}
+            
+            {!! Form::open(['route' => ['posts.destroy', 'id' => $post->id ], 'method' => 'DELETE', 'class' => 'col-sm-6']) !!}
+                {!! Form::submit('削除', ['class' => 'btn btn-danger btn-block col-sm-12']) !!}
+            {!! Form::close() !!}
+    
+        </div>
+        <div class="rowm mt-3">
+            <table class="offset-sm-4 col-sm-4 table table-bordered table-striped">
+                <tr>
+                    <th>回答者</th>
+                </tr>
+                @foreach($users as $user)
+                <tr>
+                    <td><a href="/rooms/{{ $user->room($post->id)->id }}">{{ $user->name }}</a></td>
+                </tr>
+                @endforeach
+            </table>
+        </div>
+    
+    @endif
+    
+    @if(Auth::user()->role === 1)
+        @if(!$post->is_room_exist(Auth::id()))
+        <div class="row">
+            <form action="/rooms" method="POST" class="offset-sm-5 col-sm-2 row">
+                <input type="hidden" name="post_id" value="{{ $post->id }}">
+                {{ csrf_field() }}
+                <button type="submit" class="btn btn-danger">ルームを作成</button>
+            </form>
+        </div>
+        @else
+        <div class="row mt-3">
+            <a href="/rooms/{{ $room->id }}" class="offset-sm-4 col-sm-4 btn btn-success">回答ルームへ</a>
+        </div>
+        @endif
     @endif
 
 @endsection

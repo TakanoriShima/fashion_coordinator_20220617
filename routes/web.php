@@ -49,6 +49,14 @@ Route::group(['middleware' => ['auth']], function () {
     
     // キーワード検索
     Route::get('search', 'PostsController@search')->name('posts.search');
+    
+    // ルーム関係
+    Route::resource('rooms', 'RoomsController');
+    // ネスト
+    Route::group(['prefix' => 'rooms/{id}'], function () {
+        // ルームに対するチャット
+        Route::resource('chats', 'ChatsController');;
+    });
 });
 
 

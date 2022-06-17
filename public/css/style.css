@@ -443,7 +443,22 @@ th {
 .table-bordered {
     border: none;
 }
-チャット
+/*チャット*/
+
+.chatroom_border {
+    border: solid 2px red;
+    border-radius: 5px;
+}
+
+.chat_border {
+    border: solid 1px #0000ff36;
+    background-color: #87ceeb66;
+    border-radius: 10px;
+}
+
+.chat_botton {
+    height: 50px;
+}
 *{
     margin: 0;
     padding: 0;

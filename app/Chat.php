@@ -4,22 +4,20 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
-use App\Post;
+use App\Room;
 
 class Chat extends Model
 {
-     protected $fillable = ['user_id', 'post_id', 'content', ];
+    protected $fillable = ['room_id', 'user_id', 'message'];
     
     /**
-     * このコメントを所有する投稿。（Userモデルとの多対1の関係を定義）
+     * このチャットを所有するルーム（Roomモデルとの多対1の関係を定義）
      */
-    public function post(){
-        return $this->belongsTo(Post::class);
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
     }
     
-    /**
-     * この投稿を所有するユーザ。（Userモデルとの多対1の関係を定義）
-     */
     public function user()
     {
         return $this->belongsTo(User::class);

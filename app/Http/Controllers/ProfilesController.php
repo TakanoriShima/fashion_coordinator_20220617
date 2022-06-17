@@ -24,8 +24,13 @@ class ProfilesController extends Controller
      */
     public function create()
     {
+        
         $profile = new Profile();
-        return view('profiles.create', compact('profile'));
+        if(\Auth::user()->role === 1){
+            return view('profiles.create', compact('profile'));
+        }else{
+            return view('profiles.create_user', compact('profile'));
+        }
     }
 
     /**
@@ -36,7 +41,45 @@ class ProfilesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request);
+        
+        if(\Auth::user()->role === 1){
+             $this->validate($request, [
+                'nickname' => 'required',
+                'birthday' => 'required',
+                'height' => 'required',
+                'style' => 'required',
+                'comment' => 'required',
+            ]);
+            
+            $nickname = $request->input('nickname');
+            $birthday = $request->input('birthday');
+            $height = $request->input('height');
+            $style = $request->input('style');
+            $comment = $request->input('comment');
+            
+            $profile = \Auth::user()->profile()->create(compact('nickname', 'birthday', 'height', 'style', 'comment'));
+        
+            
+        }else{
+             $this->validate($request, [
+                'nickname' => 'required',
+                'birthday' => 'required',
+                'height' => 'required',
+                'phone' => 'required',
+                'comment' => 'required',
+            ]);
+            
+            $nickname = $request->input('nickname');
+            $birthday = $request->input('birthday');
+            $height = $request->input('height');
+            $phone = $request->input('phone');
+            $comment = $request->input('comment');
+            
+            $profile = \Auth::user()->profile()->create(compact('nickname', 'birthday', 'height', 'phone', 'comment'));
+        }
+       
+        return redirect('/top');
     }
 
     /**
